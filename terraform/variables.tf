@@ -27,3 +27,10 @@ variable "db_name" {
   description = "Nombre de la base de datos"
   default     = "task_manager"
 }
+
+variable "vpc_id" {
+  description = "ID of the VPC where resources will be created"
+  type        = string
+  default     = "vpc-0db73927116b9f3a2"
+}
+

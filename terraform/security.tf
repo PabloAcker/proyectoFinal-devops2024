@@ -1,7 +1,8 @@
 resource "aws_security_group" "ec2_sg" {
   name        = "ec2-security-group"
-  description = "Allows traffic for the web application" # Descripción en inglés compatible con ASCII
-  
+  description = "Allows traffic for the web application"
+  vpc_id      = var.vpc_id
+
   ingress {
     from_port   = 80
     to_port     = 80
@@ -31,14 +32,19 @@ resource "aws_security_group" "ec2_sg" {
   }
 
   lifecycle {
-    prevent_destroy = true
+    ignore_changes = [name]
+  }
+
+  tags = {
+    Name = "ec2-security-group"
   }
 }
 
 resource "aws_security_group" "rds_sg" {
   name        = "rds-security-group"
-  description = "Allows traffic for the database" # Descripción en inglés compatible con ASCII
-  
+  description = "Allows traffic for the database"
+  vpc_id      = var.vpc_id
+
   ingress {
     from_port   = 5432
     to_port     = 5432
@@ -54,6 +60,10 @@ resource "aws_security_group" "rds_sg" {
   }
 
   lifecycle {
-    prevent_destroy = true
+    ignore_changes = [name]
+  }
+
+  tags = {
+    Name = "rds-security-group"
   }
 }
