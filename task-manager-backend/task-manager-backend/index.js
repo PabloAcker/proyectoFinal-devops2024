@@ -2,6 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const { Pool } = require('pg');
+const PORT = 5000;
 
 const app = express();
 
@@ -10,11 +11,11 @@ app.use(bodyParser.json());
 
 // Configura la conexión a PostgreSQL
 const pool = new Pool({
-    user: 'postgres', // Cambia esto por tu usuario de PostgreSQL
-    host: 'localhost',
-    database: 'taskmanager',
-    password: 'admin123', // Cambia esto por tu contraseña
-    port: 5432,
+    user: process.env.DB_USER || 'postgres', // Cambia esto por tu usuario de PostgreSQL o usa variables de entorno
+    host: process.env.DB_HOST || 'localhost', // Cambia esto o usa variables de entorno para configuraciones dinámicas
+    database: process.env.DB_NAME || 'taskmanager',
+    password: process.env.DB_PASSWORD || 'admin123', // Cambia esto por tu contraseña o usa variables de entorno
+    port: process.env.DB_PORT || 5432,
 });
 
 // CRUD Routes
@@ -73,8 +74,10 @@ app.delete('/tasks/:id', async (req, res) => {
     }
 });
 
-app.listen(5000, () => console.log('Server running on http://localhost:5000'));
+// Escuchar en 0.0.0.0 para permitir conexiones externas
+app.listen(PORT, '0.0.0.0', () => console.log(`Server running on http://0.0.0.0:${PORT}`));
 
+// Rutas adicionales
 app.get('/tasks/:id', async (req, res) => {
     const { id } = req.params;
     try {
@@ -129,4 +132,3 @@ app.get('/tasks/search/:title', async (req, res) => {
         res.status(500).send('Error al buscar tareas por título');
     }
 });
-
