@@ -58,6 +58,7 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         run: |
             terraform apply -auto-approve
+            terraform output -raw ec2_public_ip > ec2_ip.txt
             terraform output -raw rds_endpoint > rds_endpoint.txt
 
       # 8. Export the RDS endpoint as an environment variable
@@ -67,5 +68,6 @@ jobs:
       # 9. Transfer RDS Endpoint to EC2
       - name: Transfer RDS Endpoint to EC2
         run: |
-            scp -i ./terraform/nginx-server.key rds_endpoint.txt ec2-user@${{ steps.terraform.outputs.ec2_public_ip }}:/etc/rds_endpoint
+            EC2_IP=$(cat ec2_ip.txt)
+            scp -o StrictHostKeyChecking=no -i ./terraform/nginx-server.key rds_endpoint.txt ec2-user@$(cat ec2_ip.txt):/etc/rds_endpoint
 
