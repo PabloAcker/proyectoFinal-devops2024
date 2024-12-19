@@ -61,10 +61,7 @@ jobs:
             terraform output -raw ec2_public_ip > $GITHUB_WORKSPACE/ec2_ip.txt
             terraform output -raw rds_endpoint > $GITHUB_WORKSPACE/rds_endpoint.txt
 
-      # 8. Export the RDS endpoint as an environment variable
-      - name: Set RDS Endpoint
-        run: echo "RDS_ENDPOINT=$(cat rds_endpoint.txt)" >> $GITHUB_ENV
-
+      # Debug:
       - name: Verify ec2_ip.txt
         run: |
             if [ ! -f $GITHUB_WORKSPACE/ec2_ip.txt ]; then
@@ -72,6 +69,18 @@ jobs:
               exit 1
             fi
             cat $GITHUB_WORKSPACE/ec2_ip.txt
+
+      - name: Inspect rds_endpoint.txt
+        run: cat $GITHUB_WORKSPACE/rds_endpoint.txt
+
+      - name: Debug RDS Variable
+        run: echo "RDS_ENDPOINT=$RDS_ENDPOINT"
+
+      # 8. Export the RDS endpoint as an environment variable
+      - name: Set RDS Endpoint
+        run: |
+            RDS_ENDPOINT=$(cat $GITHUB_WORKSPACE/rds_endpoint.txt | sed 's/:.*//')
+            echo "RDS_ENDPOINT=$RDS_ENDPOINT" >> $GITHUB_ENV
 
       # 9. Transfer RDS Endpoint to EC2
       - name: Transfer RDS Endpoint to EC2
