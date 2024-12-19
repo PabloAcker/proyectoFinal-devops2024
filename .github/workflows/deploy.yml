@@ -58,8 +58,8 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         run: |
             terraform apply -auto-approve
-            terraform output -raw ec2_public_ip > $GITHUB_WORKSPACE/ec2_ip.txt
-            terraform output -raw rds_endpoint > $GITHUB_WORKSPACE/rds_endpoint.txt
+            terraform output -raw ec2_public_ip | grep -o '^[^:]*' > $GITHUB_WORKSPACE/ec2_ip.txt
+            terraform output -raw rds_endpoint | grep -o '^[^:]*' > $GITHUB_WORKSPACE/rds_endpoint.txt
 
       # Debug:
       - name: Verify ec2_ip.txt
@@ -79,8 +79,11 @@ jobs:
       # 8. Export the RDS endpoint as an environment variable
       - name: Set RDS Endpoint
         run: |
-            RDS_ENDPOINT=$(cat $GITHUB_WORKSPACE/rds_endpoint.txt | sed 's/:.*//')
+            RDS_ENDPOINT=$(cat $GITHUB_WORKSPACE/rds_endpoint.txt)
             echo "RDS_ENDPOINT=$RDS_ENDPOINT" >> $GITHUB_ENV
+
+      - name: Debug RDS Variable
+        run: echo "RDS_ENDPOINT=$RDS_ENDPOINT"
 
       # 9. Transfer RDS Endpoint to EC2
       - name: Transfer RDS Endpoint to EC2
