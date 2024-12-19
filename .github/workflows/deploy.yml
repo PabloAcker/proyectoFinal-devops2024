@@ -31,7 +31,7 @@ jobs:
       # 4. Build Docker images
       - name: Build Backend Image
         run: |
-          docker build -t ${{ secrets.DOCKER_USERNAME }}/task-manager-backend ./task-manager-backend
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/task-manager-backend -f ./task-manager-backend/task-manager-backend/Dockerfile ./task-manager-backend/task-manager-backend
           docker push ${{ secrets.DOCKER_USERNAME }}/task-manager-backend
 
       - name: Build Frontend Image
