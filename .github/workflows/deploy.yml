@@ -80,7 +80,7 @@ jobs:
       - name: Set RDS Endpoint
         run: |
             RDS_ENDPOINT=$(cat $GITHUB_WORKSPACE/rds_endpoint.txt)
-            echo "RDS_ENDPOINT=$RDS_ENDPOINT" >> $GITHUB_ENV
+            echo "RDS_ENDPOINT=\"$RDS_ENDPOINT\"" >> $GITHUB_ENV
 
       - name: Debug RDS Variable
         run: echo "RDS_ENDPOINT=$RDS_ENDPOINT"
