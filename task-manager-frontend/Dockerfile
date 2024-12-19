@@ -1,22 +1,26 @@
-FROM node:16-alpine
+# Usar una imagen base para Node.js
+FROM node:16-alpine AS build
 
-# Crear el directorio de la aplicación
+# Crear y configurar el directorio de trabajo
 WORKDIR /app
 
-# Copiar archivos necesarios
+# Copiar los archivos de configuración
 COPY package*.json ./
 
-# Instalar dependencias
+# Instalar las dependencias
 RUN npm install
 
-# Copiar el resto del código
+# Copiar el resto de los archivos del proyecto
 COPY . .
+
+# Cambiar permisos de los archivos para evitar problemas
+RUN chmod -R 755 /app
 
 # Construir la aplicación
 RUN npm run build
 
-# Usar un servidor Nginx para servir la aplicación
+# Usar Nginx para servir la aplicación
 FROM nginx:1.21-alpine
-COPY --from=0 /app/build /usr/share/nginx/html
+COPY --from=build /app/build /usr/share/nginx/html
 EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]
