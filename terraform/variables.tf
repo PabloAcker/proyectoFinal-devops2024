@@ -10,6 +10,7 @@ variable "ec2_instance_type" {
 
 variable "key_name" {
   description = "Nombre del par de claves para EC2"
+  default     = "nginx-server"
 }
 
 variable "db_username" {
@@ -19,6 +20,7 @@ variable "db_username" {
 
 variable "db_password" {
   description = "Contraseña de la base de datos"
+  default     = "admin123"
 }
 
 variable "db_name" {

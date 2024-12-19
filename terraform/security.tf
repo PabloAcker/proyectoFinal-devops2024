@@ -1,6 +1,6 @@
 resource "aws_security_group" "ec2_sg" {
   name        = "ec2-security-group"
-  description = "Permite tráfico para la aplicación web"
+  description = "Allows traffic for the web application" # Descripción en inglés compatible con ASCII
   
   ingress {
     from_port   = 80
@@ -33,8 +33,8 @@ resource "aws_security_group" "ec2_sg" {
 
 resource "aws_security_group" "rds_sg" {
   name        = "rds-security-group"
-  description = "Permite tráfico para la base de datos"
-
+  description = "Allows traffic for the database" # Descripción en inglés compatible con ASCII
+  
   ingress {
     from_port   = 5432
     to_port     = 5432

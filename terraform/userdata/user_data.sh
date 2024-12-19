@@ -4,10 +4,10 @@ yum install docker -y
 service docker start
 usermod -a -G docker ec2-user
 
-# Login a DockerHub
+# Login en DockerHub
 docker login -u <DOCKERHUB_USERNAME> -p <DOCKERHUB_PASSWORD>
 
-# Pull y ejecutar las imágenes
+# Pull y ejecución de las imágenes
 docker pull <DOCKERHUB_USERNAME>/task-manager-backend
 docker pull <DOCKERHUB_USERNAME>/task-manager-frontend
 
