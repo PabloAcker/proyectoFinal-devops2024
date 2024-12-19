@@ -5,6 +5,7 @@ resource "aws_instance" "app" {
 
   user_data = <<-EOF
     #!/bin/bash
+    export RDS_ENDPOINT=$(cat /etc/rds_endpoint)
     apt-get update -y
     apt-get install -y docker.io
     systemctl start docker
@@ -13,7 +14,12 @@ resource "aws_instance" "app" {
     docker login -u ${var.dockerhub_username} -p ${var.dockerhub_password}
     docker pull ${var.dockerhub_username}/task-manager-backend
     docker pull ${var.dockerhub_username}/task-manager-frontend
-    sudo docker run -d -p 5000:5000 ${var.dockerhub_username}/task-manager-backend
+    sudo docker run -d -p 5000:5000 \
+      -e DB_HOST=$RDS_ENDPOINT \
+      -e DB_USER=postgres \
+      -e DB_PASSWORD=admin123 \
+      -e DB_NAME=taskmanager \
+      pabloacker/task-manager-backend
     sudo docker run -d -p 80:80 ${var.dockerhub_username}/task-manager-frontend
   EOF
 

@@ -56,4 +56,16 @@ jobs:
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        run: terraform apply -auto-approve
+        run: |
+            terraform apply -auto-approve
+            terraform output -raw rds_endpoint > rds_endpoint.txt
+
+      # 8. Export the RDS endpoint as an environment variable
+      - name: Set RDS Endpoint
+        run: echo "RDS_ENDPOINT=$(cat rds_endpoint.txt)" >> $GITHUB_ENV
+
+      # 9. Transfer RDS Endpoint to EC2
+      - name: Transfer RDS Endpoint to EC2
+        run: |
+            scp -i ./terraform/nginx-server.key rds_endpoint.txt ec2-user@${{ steps.terraform.outputs.ec2_public_ip }}:/etc/rds_endpoint
+

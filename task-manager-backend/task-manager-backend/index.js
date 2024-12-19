@@ -11,10 +11,10 @@ app.use(bodyParser.json());
 
 // Configura la conexión a PostgreSQL
 const pool = new Pool({
-    user: process.env.DB_USER || 'postgres', // Cambia esto por tu usuario de PostgreSQL o usa variables de entorno
-    host: process.env.DB_HOST || 'localhost', // Cambia esto o usa variables de entorno para configuraciones dinámicas
+    user: process.env.DB_USER || 'postgres',
+    host: process.env.DB_HOST || 'localhost',
     database: process.env.DB_NAME || 'taskmanager',
-    password: process.env.DB_PASSWORD || 'admin123', // Cambia esto por tu contraseña o usa variables de entorno
+    password: process.env.DB_PASSWORD || 'admin123',
     port: process.env.DB_PORT || 5432,
 });
 
