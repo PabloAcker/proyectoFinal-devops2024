@@ -34,3 +34,15 @@ variable "vpc_id" {
   default     = "vpc-0db73927116b9f3a2"
 }
 
+variable "dockerhub_username" {
+  description = "DockerHub username"
+  type        = string
+}
+
+variable "dockerhub_password" {
+  description = "DockerHub password"
+  type        = string
+  sensitive   = true
+}
+
+

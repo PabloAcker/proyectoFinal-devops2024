@@ -5,15 +5,16 @@ resource "aws_instance" "app" {
 
   user_data = <<-EOF
     #!/bin/bash
-    yum update -y
-    yum install docker -y
-    service docker start
-    usermod -a -G docker ec2-user
-    docker login -u pabloacker -p 1nc0rr3ct4_9700
-    docker pull pabloacker/task-manager-backend
-    docker pull pabloacker/task-manager-frontend
-    sudo docker run -d -p 5000:5000 pabloacker/task-manager-backend
-    sudo docker run -d -p 80:80 pabloacker/task-manager-frontend
+    apt-get update -y
+    apt-get install -y docker.io
+    systemctl start docker
+    systemctl enable docker
+    usermod -aG docker ubuntu
+    docker login -u ${var.dockerhub_username} -p ${var.dockerhub_password}
+    docker pull ${var.dockerhub_username}/task-manager-backend
+    docker pull ${var.dockerhub_username}/task-manager-frontend
+    sudo docker run -d -p 5000:5000 ${var.dockerhub_username}/task-manager-backend
+    sudo docker run -d -p 80:80 ${var.dockerhub_username}/task-manager-frontend
   EOF
 
   tags = {
