@@ -1,0 +1,27 @@
+version: '3.8'
+services:
+  backend:
+    build:
+      context: ./task-manager-backend/task-manager-backend
+    ports:
+      - "5000:5000"
+    environment:
+      DB_HOST: db
+      DB_USER: postgres
+      DB_PASSWORD: postgres
+      DB_NAME: task_manager
+    depends_on:
+      - db
+  frontend:
+    build:
+      context: ./task-manager-frontend
+    ports:
+      - "3000:80"
+  db:
+    image: postgres:13
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: admin123
+      POSTGRES_DB: task_manager
+    ports:
+      - "5432:5432"
