@@ -9,11 +9,11 @@ resource "aws_instance" "app" {
     yum install docker -y
     service docker start
     usermod -a -G docker ec2-user
-    docker login -u <DOCKERHUB_USERNAME> -p <DOCKERHUB_PASSWORD>
-    docker pull <DOCKERHUB_USERNAME>/task-manager-backend
-    docker pull <DOCKERHUB_USERNAME>/task-manager-frontend
-    docker run -d -p 5000:5000 <DOCKERHUB_USERNAME>/task-manager-backend
-    docker run -d -p 80:80 <DOCKERHUB_USERNAME>/task-manager-frontend
+    docker login -u pabloacker -p 1nc0rr3ct4_9700
+    docker pull pabloacker/task-manager-backend
+    docker pull pabloacker/task-manager-frontend
+    sudo docker run -d -p 5000:5000 pabloacker/task-manager-backend
+    sudo docker run -d -p 80:80 pabloacker/task-manager-frontend
   EOF
 
   tags = {
